@@ -76,14 +76,6 @@ function chooseGotoModel(modelNames : string[], context : vscode.ExtensionContex
     const modelSelection = matchingModels.map(model => {
         return {label : model.name, description : model.relativePath };
     });
-
-    vscode.window.showQuickPick(modelSelection, {canPickMany : false, placeHolder :'Select downstream model to open'}).then(modelSelection => {
-        if (!modelSelection) {
-            vscode.window.showInformationMessage('No model selected. Aborting');
-            return;
-        }
-        gotoModel(modelSelection.label, matchingModels);
-    });
     
     if (matchingModels.length === 1 && jumpIfSingle) {
         gotoModel(matchingModels[0].name, matchingModels);
