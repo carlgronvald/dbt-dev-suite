@@ -1,6 +1,10 @@
 Possibilities:
  Easy
-  
+  Update models on edits to keep correct downstream
+  Include snapshots in models
+
+ medium
+  Make the model info only update as it has to, to avoid wasting compute time
 
  Hard
   Type checking and strong high-level intellisense suggestions

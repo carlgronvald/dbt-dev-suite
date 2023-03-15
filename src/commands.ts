@@ -115,6 +115,7 @@ function cmdGotoDownstream(context : vscode.ExtensionContext) {
     }
 
     const doc = activeEditor.document;
+    vscode.window.showInformationMessage(doc.languageId);
     const modelName = path.basename(doc.fileName).split('.')[0];
     const downstreams = context.workspaceState.get<ModelDownstreams>('dbt-dev-suite.model-downstreams');
     if (!downstreams) {

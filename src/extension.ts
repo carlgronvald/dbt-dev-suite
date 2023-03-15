@@ -7,6 +7,7 @@ import * as path from 'path';
 import { listFiles} from './utils';
 import { registerAllCommands } from './commands';
 import { Model, getModels, getModelDownstreams } from './model';
+import { DbtSymbolProvider } from './symbolProvider';
 
 
 export function updateModels(context : vscode.ExtensionContext) {
@@ -25,9 +26,6 @@ export function updateModels(context : vscode.ExtensionContext) {
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "dbt-dev-suite" is now active!');
 
 	updateModels(context);
 	// Listen for changes to the workspace folders
@@ -44,6 +42,10 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	registerAllCommands(context);
+
+	
+	const provider = new DbtSymbolProvider();
+	const disposable = vscode.languages.registerDocumentSymbolProvider({language : 'sql'}, provider);
 }
 
 // This method is called when your extension is deactivated
