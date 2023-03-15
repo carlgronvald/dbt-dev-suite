@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 
-import { runInTerminal, getAbsoluteModelPath} from './utils';
+import { runInTerminal} from './utils';
+import { Model } from './model';
 
 
 function build(context : vscode.ExtensionContext) {
@@ -55,44 +56,46 @@ function gotoUpstream(context : vscode.ExtensionContext) {
         return;
     }
 
-    const files = context.workspaceState.get<string[]>('dbt-dev-suite.files');
-    if (!files) {
+    const models = context.workspaceState.get<Model[]>('dbt-dev-suite.models');
+    if (!models) {
         vscode.window.showInformationMessage('No dbt files found in workspace');
         return;
     }
-
-    const models = files.map(file => {
-        return {name : path.basename(file).split('.sql')[0], path : file };
-    });
 
     
     for (const model of models) {
         console.log(model);
     }
 
-
-    const upstreamModelPaths = upstreamModels.map(model => {
-        const modelPath = models.find(m => m.name === model)?.path;
-        if (!modelPath) {
+    const matchingModels = upstreamModels.flatMap(modelName => {
+        const model = models.find(m => m.name === modelName);
+        if (!model) {
             vscode.window.showInformationMessage('Could not find model ' + model);
-            return;
+            return [];
         }
-        return modelPath;
+        return [model];
     });
 
-    const modelPaths = upstreamModelPaths.filter(modelPath => modelPath !== undefined) as string[];
-
-    if (modelPaths.length < 1) {
+    if (matchingModels.length < 1) {
         vscode.window.showInformationMessage('No upstream models found');
         return;
     }
 
-    vscode.window.showQuickPick(modelPaths, {canPickMany : false, placeHolder : 'Select upstream model'}).then(modelPath => {
-        if (!modelPath) {
+    const selection = matchingModels.map(model => {
+        return {label : model.name, description : model.relativePath};
+    });
+
+    vscode.window.showQuickPick(selection, {canPickMany : false, placeHolder : 'Select upstream model'}).then(selection => {
+        if (!selection) {
             vscode.window.showInformationMessage('No model selected. Aborting');
             return;
         }
-        vscode.workspace.openTextDocument( getAbsoluteModelPath(modelPath)).then(doc => {
+        const selectedModel = matchingModels.find(model => model.name === selection.label);
+        if (!selectedModel) {
+            vscode.window.showInformationMessage('Could not find model ' + selection.label);
+            return;
+        }
+        vscode.workspace.openTextDocument(selectedModel.absolutePath).then(doc => {
             vscode.window.showTextDocument(doc);
         });
     });

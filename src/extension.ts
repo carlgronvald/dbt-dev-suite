@@ -6,23 +6,17 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { listFiles} from './utils';
 import { registerAllCommands } from './commands';
+import { Model, getModels } from './model';
 
 
-
-function updateFiles(context : vscode.ExtensionContext) {
+export function updateModels(context : vscode.ExtensionContext) {
 	const folder = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
 	if(!folder) {
-		context.workspaceState.update('dbt-dev-suite.files', undefined);
+		context.workspaceState.update('dbt-dev-suite.models', undefined);
 		return;
 	}
-	// check if folder/models is a directory
-	if (!fs.existsSync(path.join(folder, 'models'))) {
-		context.workspaceState.update('dbt-dev-suite.files', undefined);
-		return;
-	}
-	const modelFiles = listFiles(path.join(folder, 'models'), 'models').filter(file => file.endsWith('.sql'));
-	const seedFiles = listFiles(path.join(folder, 'seeds'), 'seeds').filter(file => file.endsWith('.csv'));
-	context.workspaceState.update('dbt-dev-suite.files', modelFiles.concat(seedFiles));
+    const allModels = getModels(folder);
+	context.workspaceState.update('dbt-dev-suite.models', allModels);
 }
 
 // This method is called when your extension is activated
@@ -33,18 +27,18 @@ export function activate(context: vscode.ExtensionContext) {
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "dbt-dev-suite" is now active!');
 
-	updateFiles(context);
+	updateModels(context);
 	// Listen for changes to the workspace folders
 	vscode.workspace.onDidChangeWorkspaceFolders(event => {
-		updateFiles(context);
+		updateModels(context);
 	});
 
 	vscode.workspace.onDidCreateFiles(event => {
-		updateFiles(context);
+		updateModels(context);
 	});
 	
 	vscode.workspace.onDidDeleteFiles(event => {
-		updateFiles(context);
+		updateModels(context);
 	});
 
 	registerAllCommands(context);
