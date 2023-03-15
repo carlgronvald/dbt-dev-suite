@@ -58,12 +58,12 @@ function chooseGotoModel(modelNames : string[], context : vscode.ExtensionContex
     });
     
     if (warnOnNoMatch) {
-        const notMatchingModels = models.filter(model => {
-            return !modelNames.includes(model.name);
+        const notMatchingModels = modelNames.filter(name => {
+            return matchingModels.find(model => model.name === name) === undefined;
         });
         
-        notMatchingModels.forEach(model => {
-            vscode.window.showWarningMessage('Model ' + model.name + ' not found in workspace');
+        notMatchingModels.forEach(modelName => {
+            vscode.window.showWarningMessage('Model ' + modelName + ' not found in workspace');
         });
     }
 
