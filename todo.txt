@@ -1,3 +1,11 @@
+Possibilities:
+ Easy
+  
+
+ Hard
+  Type checking and strong high-level intellisense suggestions
+  DAG view
+
 
 TODO: Look at these things for readme:
 ## Following extension guidelines
