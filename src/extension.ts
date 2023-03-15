@@ -40,14 +40,12 @@ function listFiles(dirPath: string, accPath : string = ''): string[] {
 function updateFiles(context : vscode.ExtensionContext) {
 	const folder = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
 	if(!folder) {
-		vscode.window.showInformationMessage('No workspace currently chosen.');
 		context.workspaceState.update('dbt-dev-suite.files', undefined);
 		return;
 	}
 	// check if folder/models is a directory
 	if (!fs.existsSync(path.join(folder, 'models'))) {
 		context.workspaceState.update('dbt-dev-suite.files', undefined);
-		vscode.window.showInformationMessage('No dbt models folder found in workspace.');
 		return;
 	}
 
