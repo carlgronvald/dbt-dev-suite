@@ -12,9 +12,19 @@ function cmdBuild(context : vscode.ExtensionContext) {
         vscode.window.showInformationMessage('No dbt files found in workspace');
         return;
     }
-    const modelSelection = models.map(model => {
+    let modelSelection = models.map(model => {
         return {label : model.name, description : model.relativePath };
     });
+
+    const activeEditor = vscode.window.activeTextEditor;
+    if (activeEditor) {
+        const doc = activeEditor.document;
+        const modelName = path.basename(doc.fileName).split('.')[0];
+        if (modelSelection.find(model => model.label === modelName) !== undefined) {
+            const act = {label : modelName, description : doc.fileName};
+            modelSelection = [act].concat(modelSelection.filter(model => model.label !== modelName));
+        }
+    }
 
     const modes = ['downstream', 'upstream'];
     
