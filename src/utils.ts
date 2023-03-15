@@ -27,17 +27,6 @@ export function listFiles(dirPath: string, accPath : string = ''): string[] {
     return files;
 }
 
-/**
- * 
- * @param modelPath Path to a model relative to workspace root
- * @returns Absolute path to model
- */
-export function getAbsoluteModelPath(modelPath : string) : string {
-    if (!vscode.workspace.workspaceFolders?.[0]) {
-        return modelPath;
-    }
-    return path.join(vscode.workspace.workspaceFolders?.[0].uri.fsPath, modelPath);
-}
 
 export function runInTerminal(command : string) {
 	const terminal = vscode.window.activeTerminal ? vscode.window.activeTerminal : vscode.window.createTerminal();
