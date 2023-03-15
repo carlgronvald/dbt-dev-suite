@@ -16,6 +16,10 @@
       {
         "command": "dbt-dev-suite.dbt-build",
         "title": "DBT Build Model(s)"
+      },
+      {
+        "command": "dbt-dev-suite.dbt-goto-upstream",
+        "title": "DBT Go To Upstream"
       }
     ]
   },
