@@ -51,7 +51,7 @@ function updateFiles(context : vscode.ExtensionContext) {
 		return;
 	}
 
-	context.workspaceState.update('dbt-dev-suite.files', listFiles(path.join(folder, 'models'), 'models'));
+	context.workspaceState.update('dbt-dev-suite.files', listFiles(path.join(folder, 'models'), 'models').filter(file => file.endsWith('.sql')));
 }
 
 // This method is called when your extension is activated
@@ -92,9 +92,6 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 		const models = files
-		.filter(file => {
-			return file.endsWith(".sql");
-		})
 		.map(file => {
 			return {label : path.basename(file), description : file };
 		});
