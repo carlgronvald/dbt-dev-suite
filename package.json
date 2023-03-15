@@ -20,6 +20,14 @@
       {
         "command": "dbt-dev-suite.dbt-goto-upstream",
         "title": "DBT Go To Upstream"
+      },
+      {
+        "command": "dbt-dev-suite.dbt-goto-model",
+        "title": "DBT Go To Model"
+      },
+      {
+        "command": "dbt-dev-suite.dbt-goto-downstream",
+        "title": "DBT Go To Downstream"
       }
     ]
   },

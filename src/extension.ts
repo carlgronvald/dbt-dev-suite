@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { listFiles} from './utils';
 import { registerAllCommands } from './commands';
-import { Model, getModels } from './model';
+import { Model, getModels, getModelDownstreams } from './model';
 
 
 export function updateModels(context : vscode.ExtensionContext) {
@@ -16,7 +16,9 @@ export function updateModels(context : vscode.ExtensionContext) {
 		return;
 	}
     const allModels = getModels(folder);
+	const modelDownstreams = allModels !== undefined ? getModelDownstreams(allModels) : undefined;
 	context.workspaceState.update('dbt-dev-suite.models', allModels);
+	context.workspaceState.update('dbt-dev-suite.model-downstreams', modelDownstreams);
 }
 
 // This method is called when your extension is activated
