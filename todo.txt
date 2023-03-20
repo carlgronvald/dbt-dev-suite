@@ -2,6 +2,7 @@ Possibilities:
  Easy
   Update models on edits to keep correct downstream
   Include snapshots in models
+  Make goto models use the entire word if selection is a subset of a word (so you can just put your cursor on a model and then go to it)
 
  medium
   Make the model info only update as it has to, to avoid wasting compute time
